@@ -17,10 +17,13 @@ def main():
 
   batch = boto3.client('batch')
   s3 = boto3.client('s3')
-  input_files = s3.list_objects(Bucket=s3_bucket_name, Prefix=input_prefix)['Contents']
+  input_files = s3.list_objects(Bucket=s3_bucket_name, Prefix=input_prefix)
 
   # there is at least 1 file
-  if len(input_files) > 0:
+  if 'Contents' not in input_files:
+    logger.info("No input file was found. Upload the audio files (.wav) to bucket/input in S3.")
+    
+  else:
     response = batch.submit_job(
       jobName= job_name,
       jobQueue= job_queue,
