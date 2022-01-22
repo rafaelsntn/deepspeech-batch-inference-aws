@@ -45,7 +45,7 @@ The deployment will schedule a cron event via EventBridge to run the Lambda func
 To run more than one instance simultaneously, increase the value of number_of_instances in lambda_files/check_files.py, up to 20 instances. You can increase this limit of instances deploying a compute environment with a bigger maxv_cpus in deepspeech/deepspeech_stack.py. The Lambda function will use this number of instances to submit a array job with multiple child jobs, and will create files in S3 specifying the input for each child job.
 
 ## Cleaning up
-To destroy all resources created by the CDK stack, run the following command inside the project folder from a terminal.
+To destroy all resources created by the CDK stack, run the following command inside the project folder from a terminal. <br />
 `cdk destroy`
 
 ## License
