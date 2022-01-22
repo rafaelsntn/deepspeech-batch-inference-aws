@@ -3,7 +3,7 @@ import os
 import numpy as np
 
 s3_bucket_name = os.environ["S3_BUCKET_NAME"]
-array_job_index = str(os.environ["AWS_BATCH_JOB_ARRAY_INDEX"])
+array_job_index = str(os.environ["AWS_BATCH_JOB_ARRAY_INDEX"]) if "AWS_BATCH_JOB_ARRAY_INDEX" in os.environ else 0
 input_prefix = 'input'
 output_prefix = 'output'
 processed_prefix = 'processed'
