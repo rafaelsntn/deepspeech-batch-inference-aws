@@ -19,12 +19,12 @@ dirname = os.path.dirname(__file__)
 
 BATCH_IMAGE_REPO_NAME = 'batch-ecr'
 BATCH_JOB_QUEUE_NAME = 'batch-queue'
-BATCH_JOB_NAME = 'deepspeech-job'
-INPUT_BUCKET_NAME = 'deepspeech-bucket'
+BATCH_JOB_NAME = 'speech-to-text-job'
+INPUT_BUCKET_NAME = 'speech-to-text-bucket'
 INPUT_BUCKET_ARN = f'{INPUT_BUCKET_NAME}-{Aws.ACCOUNT_ID}-{Aws.REGION}'
-PREFIX = 'deepspeech'
+PREFIX = 'speech-to-text'
 
-class DeepspeechStack(Stack):
+class SpeechToTextStack(Stack):
 
   def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
     super().__init__(scope, construct_id, **kwargs)
@@ -51,7 +51,7 @@ class DeepspeechStack(Stack):
     )
 
     # Roles
-    batchJobRole = iam.Role(self, "DeepspeechBatchJobRole", 
+    batchJobRole = iam.Role(self, "SpeechToTextBatchJobRole", 
       assumed_by=iam.CompositePrincipal(
         iam.ServicePrincipal("ecs-tasks.amazonaws.com"),
         iam.ServicePrincipal("ec2.amazonaws.com")
@@ -65,7 +65,7 @@ class DeepspeechStack(Stack):
         ),
       ],
     )
-    batchJobExecRole = iam.Role(self, "DeepspeechBatchExecRole",
+    batchJobExecRole = iam.Role(self, "SpeechToTextBatchExecRole",
       assumed_by=iam.ServicePrincipal("ecs-tasks.amazonaws.com"),
       managed_policies=[
         iam.ManagedPolicy.from_aws_managed_policy_name(
@@ -223,7 +223,7 @@ class DeepspeechStack(Stack):
 
     event_lambda_rule = events.Rule(
       self,
-      'eventLambdaRuleDeepspeech',
+      'eventLambdaRuleSpeechToText',
       schedule=events.Schedule.cron(minute='0', hour='1')
     )
     event_lambda_rule.add_target(targets.LambdaFunction(_lambdafunc))
