@@ -43,14 +43,15 @@ def main():
       s3.upload_file(f'/tmp/{bucket_index}', s3_bucket_name, f'{child_job_input_prefix}/{bucket_index}')
       bucket_index+=1
 
+
     # submit the jobs
+    array_properties = {}
+    if number_of_instances > 1: array_properties['size'] = number_of_instances
     response = batch.submit_job(
       jobName= job_name,
       jobQueue= job_queue,
       jobDefinition= job_definition,
-      arrayProperties={
-          'size': number_of_instances
-      },
+      arrayProperties=array_properties,
       containerOverrides={
           "environment": [
               {"name": "S3_BUCKET_NAME", "value": s3_bucket_name}
