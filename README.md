@@ -34,11 +34,19 @@ After deployment, you will see a new bucket in S3. To run the batch inference, y
 - {bucket-name}/input/{audio-file-name.wav} <br />
     Audio files that will be transcribed by Deepspeech.
 - {bucket-name}/output/{audio-file-name} <br />
-    After processing the audio file, the transcribed text will be saved here.
+    After processing the audio file, the text transcript will be saved here.
 - {bucket-name}/processed/{audio-file.wav} <br />
     The processed files are moved from input to processed.
+- {bucket-name}/child_job_input/{child_job_index} <br />
+    These keys will be used by the Lambda function in order to distribute the workload between the child job instances.
 
-The deployment will schedule a cronjob via EventBridge at 1 a.m. (GMT) to run the Lambda function that submits the batch job. If there isn't no input files to be processed, the Lambda function exits without submitting the job, saving costs of EC2 instances. Alternatively, you can run the lambda function directly in the AWS console.
+The deployment will schedule a cron event via EventBridge to run the Lambda function at 1 a.m. (GMT). This function will submit the batch job if it finds any input in "/input" prefix. Otherwise, it exits without submitting the job, saving costs of compute instances. Alternatively, you can run the Lambda function directly in the AWS console. <br />
+
+To run more than one instance simultaneously, increase the value of number_of_instances in lambda_files/check_files.py, up to 20 instances. You can increase this limit of instances deploying a compute environment with a bigger maxv_cpus in deepspeech/deepspeech_stack.py. The Lambda function will use this number of instances to submit a array job with multiple child jobs, and will create files in S3 specifying the input for each child job.
+
+## Cleaning up
+To destroy all resources created by the CDK stack, run the following command inside the project folder from a terminal.
+`cdk destroy`
 
 ## License
 

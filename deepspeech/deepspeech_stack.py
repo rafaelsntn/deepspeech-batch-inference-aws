@@ -88,7 +88,7 @@ class DeepspeechStack(Stack):
         state="ENABLED",
         compute_resources=batch.CfnComputeEnvironment.ComputeResourcesProperty(
           type="FARGATE",
-          maxv_cpus=2,
+          maxv_cpus=40,
           subnets=[
             self.vpc.public_subnets[0].subnet_id,
             self.vpc.public_subnets[1].subnet_id,
@@ -190,7 +190,7 @@ class DeepspeechStack(Stack):
 
     s3_lambda_policy = iam.PolicyStatement(
       effect=iam.Effect.ALLOW,
-      actions=["s3:ListBucket", "s3:GetObject"],
+      actions=["*"],
       resources=[f'arn:aws:s3:::{INPUT_BUCKET_ARN}', f'arn:aws:s3:::{INPUT_BUCKET_ARN}/*']
     )
 
