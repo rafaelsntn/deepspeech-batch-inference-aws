@@ -1,7 +1,7 @@
 # Speech-to-Text batch inference with AWS serverless
 
 This project is intended to give an alternative implementation of a Speech-to-Text solution in the cloud using [DeepSpeech](https://github.com/mozilla/DeepSpeech). The cloud providers do a great job building amazing Speech to Text solutions, but there may be some reasons for building a custom solution instead of using an off-the-shelf one:
-- You may need a more fine tuned model.
+- You may need a more fine-tuned model.
 - The cloud provider API can be much more expensive than the use of some open sources alternatives, depending on the volume of data to be processed.
 
 ## Solution architecture
@@ -43,7 +43,7 @@ After deployment, you will see a new bucket in S3. To run the batch inference, y
 
 The deployment will schedule a cron event via EventBridge to run the Lambda function at 1 a.m. (GMT). This function will submit the batch job if it finds any input in "/input" prefix. Otherwise, it exits without submitting the job, saving costs of compute instances. Alternatively, you can run the Lambda function directly in the AWS console. <br />
 
-To run more than one instance simultaneously, increase the value of number_of_instances in lambda_files/check_files.py, up to 20 instances. You can increase this limit of instances deploying a compute environment with a bigger maxv_cpus in cdk_stacks/speech_to_text_stack.py. The Lambda function will use this number of instances to submit a array job with multiple child jobs, and will create files in S3 specifying the input for each child job.
+To run more than one instance simultaneously, increase the value of number_of_instances in lambda_files/check_files.py, up to 20 instances. You can increase this limit of instances deploying a compute environment with a bigger maxv_cpus in cdk_stacks/speech_to_text_stack.py. The Lambda function will use this number of instances to submit an array job with multiple child jobs and will create files in S3 specifying the input for each child job.
 
 ## Cleaning up
 To destroy all resources created by the CDK stack, run the following command inside the project folder from a terminal. <br />
